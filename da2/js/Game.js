@@ -3,7 +3,7 @@
 GameStates.makeGame = function( game, shared ) {
     // Create your own variables.
     var bouncy = null;
-    
+
     function quitGame() {
 
         //  Here you should destroy anything you no longer need.
@@ -13,45 +13,42 @@ GameStates.makeGame = function( game, shared ) {
         game.state.start('MainMenu');
 
     }
-    
+
     return {
-    
+
         create: function () {
-    
+
             //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-            
-            // Create a sprite at the center of the screen using the 'logo' image.
-            bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'logo' );
-            // Anchor the sprite at its center, as opposed to its top-left corner.
-            // so it will be truly centered.
-            bouncy.anchor.setTo( 0.5, 0.5 );
-            
-            // Turn on the arcade physics engine for this sprite.
-            game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-            // Make it bounce off of the world bounds.
-            bouncy.body.collideWorldBounds = true;
-            
-            // Add some text using a CSS style.
-            // Center it in X, and position its top 15 pixels from the top of the world.
-            var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-            var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
-            text.anchor.setTo( 0.5, 0.0 );
-            
-            // When you click on the sprite, you go back to the MainMenu.
-            bouncy.inputEnabled = true;
-            bouncy.events.onInputDown.add( function() { quitGame(); }, this );
+
+            game.physics.startSystem(Phaser.Physics.ARCADE);
+
+            this.game.stage.backgroundColor = "#a9f0ff";
+
+            this.map = this.game.add.tilemap('tilemap');
+            this.map.addTilesetImage('chickengame', 'chickentiles')
+
+            this.backgroundlayer = this.map.createLayer('BackgroundLayer');
+            this.groundlayer = this.map.createLayer('GroundLayer');
+            this.grasslayer = this.map.createLayer('GrassLayer');
+            this.objectlayer = this.map.createLayer('ObjectNoCLayer');
+            this.map.setCollisionBetween(1, 100, true, 'GroundLayer');
+
+            this.groundlayer.resizeWorld();
+
+            game.camera.x = 0;
+            game.camera.y = (game.world.centerY) + 100;
         },
-    
+
         update: function () {
-    
+
             //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-            
+
             // Accelerate the 'logo' sprite towards the cursor,
             // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
             // in X or Y.
             // This function returns the rotation angle that makes it visually match its
             // new trajectory.
-            bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+            //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
         }
     };
 };

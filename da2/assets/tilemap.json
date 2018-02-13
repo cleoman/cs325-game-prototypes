@@ -62,8 +62,17 @@
  "tileheight":32,
  "tilesets":[
         {
+         "columns":8,
          "firstgid":1,
-         "source":"chickengame.tsx"
+         "image":"chickengame.gif",
+         "imageheight":192,
+         "imagewidth":256,
+         "margin":0,
+         "name":"chickengame",
+         "spacing":0,
+         "tilecount":48,
+         "tileheight":32,
+         "tilewidth":32
         }],
  "tilewidth":32,
  "type":"map",
