@@ -139,7 +139,7 @@ window.onload = function() {
       game.physics.arcade.enable(myEgg);
       myEgg.body.velocity.y = 100;
       myEgg.lifespan = 10000;
-      if(game.rnd.integerInRange(0,100) === 42){
+      if(game.rnd.integerInRange(0,200) === 42){
         let goldenEgg = game.add.sprite(game.rnd.integerInRange(210, 800),game.rnd.integerInRange(-100,-20), 'goldenegg');
         game.physics.arcade.enable(goldenEgg);
         goldenEgg.body.velocity.y = 100;
