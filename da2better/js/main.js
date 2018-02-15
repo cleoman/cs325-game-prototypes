@@ -153,6 +153,7 @@ window.onload = function() {
             align: "center"
           });
           timer.stop();
+          ding.stop();
         }, this);
       }
     }
