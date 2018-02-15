@@ -5,17 +5,23 @@ var GameStates = {};
 GameStates.makeBoot = function( game ) {
     return {
         init: function () {
-    
+
             //  Unless you specifically know your game needs to support multi-touch I would recommend setting this to 1
             game.input.maxPointers = 1;
-    
+
             //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
             game.stage.disableVisibilityChange = true;
-    
+
             if (game.device.desktop)
             {
                 //  If you have any desktop specific settings, they can go in here
                 game.scale.pageAlignHorizontally = true;
+                // http://www.davideaversa.it/2016/06/quick-dev-tips-pixel-perfect-scaling-phaser-game/
+                this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+                this.game.scale.setUserScale(4, 4);
+                this.game.renderer.renderSession.roundPixels = true;
+                Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+
             }
             else
             {
@@ -26,23 +32,23 @@ GameStates.makeBoot = function( game ) {
                 game.scale.forceLandscape = true;
                 game.scale.pageAlignHorizontally = true;
             }
-    
+
         },
-    
+
         preload: function () {
-    
+
             //  Here we load the assets required for our Preloader state (in this case a background and a loading bar)
             game.load.image('preloaderBackground', 'assets/preloader_background.jpg');
             game.load.image('preloaderBar', 'assets/preloader_bar.png');
-    
+
         },
-    
+
         create: function () {
-    
+
             //  By this point the preloader assets have loaded to the cache, we've set the game settings
             //  So now let's start the real preloader going
             game.state.start('Preloader');
-    
+
         }
     };
 };

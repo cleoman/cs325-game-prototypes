@@ -30,6 +30,10 @@ GameStates.makePreloader = function( game ) {
             game.load.image( 'logo', 'assets/phaser.png' );
 						game.load.image( 'chickentiles', 'assets/chickengame.gif' )
 						game.load.tilemap( 'tilemap', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON)
+
+						// players
+						game.load.spritesheet('chicken', 'assets/chickenplayer.png', 8, 8);
+
         },
 
         create: function () {
@@ -53,7 +57,7 @@ GameStates.makePreloader = function( game ) {
             if (game.cache.isSoundDecoded('titleMusic') && ready == false)
             {
                 ready = true;
-                game.state.start('MainMenu');
+                game.state.start('Game');
             }
 
         }

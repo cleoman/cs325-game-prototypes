@@ -3,6 +3,7 @@
 GameStates.makeGame = function( game, shared ) {
     // Create your own variables.
     var bouncy = null;
+    var player = null;
 
     function quitGame() {
 
@@ -24,6 +25,8 @@ GameStates.makeGame = function( game, shared ) {
 
             this.game.stage.backgroundColor = "#a9f0ff";
 
+
+
             this.map = this.game.add.tilemap('tilemap');
             this.map.addTilesetImage('chickengame', 'chickentiles')
 
@@ -36,7 +39,23 @@ GameStates.makeGame = function( game, shared ) {
             this.groundlayer.resizeWorld();
 
             game.camera.x = 0;
-            game.camera.y = (game.world.centerY) + 100;
+            game.camera.y = (game.world.centerY) + 450;
+
+            game.physics.arcade.gravity.y = 250;
+
+            player = game.add.sprite(16, 16, 'chicken');
+            player.frame = 0;
+            game.physics.enable(player);
+
+            player.body.bounce.y = 0.2;
+            player.body.collideWorldBounds = true;
+            // player.body.setSize()
+
+            game.camera.follow(player);
+
+            this.cursors = this.game.input.keyboard.createCursorKeys();
+
+
         },
 
         update: function () {
@@ -49,6 +68,17 @@ GameStates.makeGame = function( game, shared ) {
             // This function returns the rotation angle that makes it visually match its
             // new trajectory.
             //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+            this.game.physics.arcade.collide(player, this.groundlayer);
+            player.body.velocity.x = 0;
+
+            if(this.cursors.right.isDown) {
+              player.body.velocity.x = 10;
+              player.frame = 0;
+            }
+            else if (this.cursors.left.isDown) {
+              player.body.velocity.x = -10;
+              player.frame = 1;
+            }
         }
     };
 };
