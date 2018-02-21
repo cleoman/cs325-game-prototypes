@@ -14,10 +14,14 @@ window.onload = function() {
 
     function preload() {
         // Load an image and call it 'logo'.
-        game.load.image( 'chickenbg', 'assets/chickenbg.png');
-        game.load.image( 'egg', 'assets/egg.png' );
-        game.load.audio( 'chickenmusic', 'assets/chicken.mp3');
-        game.load.image( 'goldenegg', 'assets/goldenegg.png' );
+        // game.load.image( 'chickenbg', 'assets/chickenbg.png');
+        // game.load.image( 'egg', 'assets/egg.png' );
+        // game.load.audio( 'chickenmusic', 'assets/chicken.mp3');
+        // game.load.image( 'goldenegg', 'assets/goldenegg.png' );'
+        game.load.image( 'spacebg', 'assets/space_BG.png' );
+        game.load.image( 'spaceUIBG', 'assets/space_UIbg.png');
+        game.load.image( 'spaceUI', 'assets/space_UIstuff.png');
+
     }
 
     let pc;
@@ -51,57 +55,61 @@ window.onload = function() {
         // var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
         // text.anchor.setTo( 0.5, 0.0 );
 
-        // physics go
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        // // physics go
+        // game.physics.startSystem(Phaser.Physics.ARCADE);
+        //
 
-        // dirt bg
-        let tileSprite = game.add.tileSprite(0, 0, 800, 600, 'chickenbg');
-
-        // music
-        ding = game.add.audio('chickenmusic');
-        ding.volume = 0.3;
-        ding.play();
+        // // dirt bg
+        // let tileSprite = game.add.tileSprite(0, 0, 800, 600, 'chickenbg');
+        //
+        let bgSprite = game.add.tileSprite(0, 0, 800, 600, 'spacebg');
+        let uibgSprite = game.add.tileSprite(0, 0, 800, 600, 'spaceUIBG');
+        let uistuffSprite = game.add.tileSprite(0, 0, 800, 600, 'spaceUI');
+        // // music
+        // ding = game.add.audio('chickenmusic');
+        // ding.volume = 0.3;
+        // ding.play();
 
 
         // score display
-        chickentext = game.add.text(5,60, "Chickens: " + score, {
-          font: "32px Arial",
-          fill: "#000000",
-          align: "center"
-        });
-
-        eggtext = game.add.text(5, 90, "Eggs: " + eggs, {
-          font: "32px Arial",
-          fill: "#000000",
-          align: "center"
-        });
-
-        buytext = game.add.text(5,180, "Buy Chicken (" + price + " eggs)", {
-          font: "18px Arial",
-          fill: "#f4f000",
-          align: "center"
-        });
-
-        directionstext = game.add.text(25, 460, "Find (and click) the golden egg\nMore likely to spawn the more\nChickens you have", {
-          font: "11px Arial",
-          fill: "#000000",
-          align: "center"
-        });
+        // chickentext = game.add.text(5,60, "Chickens: " + score, {
+        //   font: "32px Arial",
+        //   fill: "#000000",
+        //   align: "center"
+        // });
+        //
+        // eggtext = game.add.text(5, 90, "Eggs: " + eggs, {
+        //   font: "32px Arial",
+        //   fill: "#000000",
+        //   align: "center"
+        // });
+        //
+        // buytext = game.add.text(5,180, "Buy Chicken (" + price + " eggs)", {
+        //   font: "18px Arial",
+        //   fill: "#f4f000",
+        //   align: "center"
+        // });
+        //
+        // directionstext = game.add.text(25, 460, "Find (and click) the golden egg\nMore likely to spawn the more\nChickens you have", {
+        //   font: "11px Arial",
+        //   fill: "#000000",
+        //   align: "center"
+        // });
 
         // setup buy click event
-        buytext.inputEnabled = true;
-        buytext.events.onInputDown.add(doBuy, this);
-        buytext.events.onInputOver.add(function() {
-          buytext.fill = "#f00000";
-        }, this);
-        buytext.events.onInputOut.add(function() {
-          buytext.fill = "#f4f000";
-        })
+        // buytext.inputEnabled = true;
+        // buytext.events.onInputDown.add(doBuy, this);
+        // buytext.events.onInputOver.add(function() {
+        //   buytext.fill = "#f00000";
+        // }, this);
+        // buytext.events.onInputOut.add(function() {
+        //   buytext.fill = "#f4f000";
+        // })
 
         // timer
-        timer = game.time.create(false);
-        timer.loop(1000, tick, this);
-        timer.start();
+        // timer = game.time.create(false);
+        // timer.loop(1000, tick, this);
+        // timer.start();
 
         // keyboard triggers
         // let upKeyPressed = game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -122,50 +130,11 @@ window.onload = function() {
         // This function returns the rotation angle that makes it visually match its
         // new trajectory.
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
-        chickentext.text = "Chickens: " + score;
-        eggtext.text = "Eggs: " + eggs;
+        // chickentext.text = "Chickens: " + score;
+        // eggtext.text = "Eggs: " + eggs;
     }
 
-    function tick() {
-      eggs += score;
-      let i;
-      for(i = 0; i < score; i++){
-        spawnEgg();
-      }
-    }
 
-    function spawnEgg() {
-      let myEgg = game.add.sprite(game.rnd.integerInRange(210, 800),game.rnd.integerInRange(-100,-20),'egg');
-      game.physics.arcade.enable(myEgg);
-      myEgg.body.velocity.y = 100;
-      myEgg.lifespan = 10000;
-      if(game.rnd.integerInRange(0,200) === 42){
-        let goldenEgg = game.add.sprite(game.rnd.integerInRange(210, 800),game.rnd.integerInRange(-100,-20), 'goldenegg');
-        game.physics.arcade.enable(goldenEgg);
-        goldenEgg.body.velocity.y = 100;
-        goldenEgg.lifespan = 10000;
-        goldenEgg.inputEnabled = true;
-        goldenEgg.events.onInputDown.add(function() {
-          let wintext;
-          wintext = game.add.text(100, 300, "YOU WIN!", {
-            font: "128px Arial",
-            fill: "#000000",
-            align: "center"
-          });
-          timer.stop();
-          ding.stop();
-        }, this);
-      }
-    }
 
-    function doBuy() {
-      if(eggs > price){
-        eggs -= price;
-        score += 1;
-        price = price * 2;
-        buytext.text = "Buy Chicken(" + price + "eggs)";
-      }
-
-    }
 
 };
