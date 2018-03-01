@@ -247,6 +247,9 @@ window.onload = function() {
       if(playerCount[5] >= 3){
         playerScore += (600 + ((playerCount[5] - 3) * 60));
       }
+      if(playerCount[0] === 1 && playerCount[1] === 1 && playerCount[2] === 1 && playerCount[3] === 1 && playerCount[4] === 1 && playerCount[5] === 1){
+        playerScore += 1000;
+      }
       if(aiCount[0] >= 3){
         aiScore += (100 + ((aiCount[0] - 3) * 10));
       }
@@ -265,6 +268,9 @@ window.onload = function() {
       if(aiCount[5] >= 3){
         aiScore += (600 + ((aiCount[5] - 3) * 60));
       } 
+      if(aiCount[0] === 1 && aiCount[1] === 1 && aiCount[2] === 1 && aiCount[3] === 1 && aiCount[4] === 1 && aiCount[5] === 1){
+        aiScore += 1000;
+      }
 
       yourScoreText.setText(yourScoreText.text + "\n" + playerScore);
       aiScoreText.setText(aiScoreText.text + "\n" + aiScore);
