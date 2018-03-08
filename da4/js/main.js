@@ -58,28 +58,16 @@ window.onload = function() {
     let throw3;
     let newgameButton;
     let lockPhase = 0;
+    let numLocked = 0;
+    let numaiLocked = 0;
 
     function create() {
-        // Create a sprite at the center of the screen using the 'logo' image.
-        // bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'logo' );
-        // // Anchor the sprite at its center, as opposed to its top-left corner.
-        // // so it will be truly centered.
-        // bouncy.anchor.setTo( 0.5, 0.5 );
-        //
-        // // Turn on the arcade physics engine for this sprite.
-        // game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-        // // Make it bounce off of the world bounds.
-        // bouncy.body.collideWorldBounds = true;
-
-        // Add some text using a CSS style.
-        // Center it in X, and position its top 15 pixels from the top of the world.
-        // var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        // var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
-        // text.anchor.setTo( 0.5, 0.0 );
 
         // graphics
         let tileSprite = game.add.tileSprite(0, 0, 1000, 600, 'background');
         let rollButton = game.add.button(40, 500, 'rollbutton', rollPlayerDice);
+        let lockinButton = game.add.button(40, 500, 'rollbutton', doLock);
+        lockinButton.visible = false;
         let rulesButton = game.add.button(760, 500, 'rulesbutton', showRules);
         newgameButton = game.add.button(40, 400, 'newgamebutton', newGame);
         newgameButton.visible = false;
@@ -120,6 +108,7 @@ window.onload = function() {
         playerDice[4].value = 1;
         playerDice[5] = game.add.sprite(160, 300, 'dice6');
         playerDice[5].value = 1;
+
         aiDice[0] = game.add.sprite(760, 100, 'dice1');
         aiDice[0].value = 1;
         aiDice[1] = game.add.sprite(880, 100, 'dice2');
@@ -132,6 +121,18 @@ window.onload = function() {
         aiDice[4].value = 1;
         aiDice[5] = game.add.sprite(880, 300, 'dice6');
         aiDice[5].value = 1;
+
+        for(let i = 0; i < 6; i++)
+        {
+          playerDice[i].inputEnabled = true;
+          playerDice[i].events.onInputDown.add(function(){doLock(i)}, this);
+          playerDice[i].lock = playerDice[i].addChild(game.make.sprite(60, 60, 'lock'));
+          playerDice[i].locked = false;
+          playerDice[i].lock.visible = false;
+          aiDice[i].lock = aiDice[i].addChild(game.make.sprite(60, 60, 'lock'));
+          aiDice[i].locked = false;
+          aiDice[i].lock.visible = false;
+        }
 
         showRules();
 
@@ -152,15 +153,34 @@ window.onload = function() {
 
       if(currentTurn < MAX_TURNS){
         for(let i = 0; i < 6; i++){
+          if(lockPhase == 1){
+            playerDice[i].input.useHandCursor = false;
+          }
+          else{
+            playerDice[i].input.useHandCursor = true;
+          }
           let newValue = game.rnd.integerInRange(1, 6);
           let aiValue = game.rnd.integerInRange(1, 6);
           console.log("set dice " + i + " to value " + newValue);
-          playerDice[i].value = newValue;
-          aiDice[i].value = aiValue;
+          if(playerDice[i].locked === false)
+          {
+            playerDice[i].value = newValue;
+          }
+          if(aiDice[i].locked === false)
+          {
+            aiDice[i].value = aiValue;
+          }
         }
         updateDice();
-        scoreDice();
-        currentTurn++;
+        if(lockPhase == 1){
+          scoreDice();
+          currentTurn++;
+          lockPhase = 0;
+          clearLocks();
+        }else{
+          lockPhase = 1;
+          aiLock();
+        }
         if(currentTurn === MAX_TURNS){
           if(playerScore > aiScore){
             turnText.setText("PLAYER WINS!");
@@ -241,6 +261,9 @@ window.onload = function() {
         console.log("I count " + playerCount[i] + "dice with point value of " + (i + 1));
       }
 
+      /*
+        How to count triples and beyond for dummies
+      */
       if(playerCount[0] >= 3){
         console.log("Adding " + ((100 + ((playerCount[0] - 3) * 10))) + "to score of " + playerScore);
         playerScore += (100 + ((playerCount[0] - 3) * 10));
@@ -285,7 +308,8 @@ window.onload = function() {
       if(aiCount[0] === 1 && aiCount[1] === 1 && aiCount[2] === 1 && aiCount[3] === 1 && aiCount[4] === 1 && aiCount[5] === 1){
         aiScore += 1000;
       }
-
+      playerScore -= (numLocked * 50);
+      aiScore -= (numaiLocked * 50);
       yourScoreText.setText(yourScoreText.text + "\n" + playerScore);
       aiScoreText.setText(aiScoreText.text + "\n" + aiScore);
 
@@ -309,4 +333,69 @@ window.onload = function() {
       newgameButton.visible = false;
     }
 
+    function doLock(diceIndex){
+      if(lockPhase === 1)
+      {
+        if(playerDice[diceIndex].lock.visible === false && numLocked < 3){
+          playerDice[diceIndex].lock.visible = true;
+          playerDice[diceIndex].locked = true;
+          numLocked++;
+        }
+        else if(playerDice[diceIndex].lock.visible === true)
+        {
+          playerDice[diceIndex].lock.visible = false;
+          playerDice[diceIndex].locked = false;
+          numLocked--;
+        }
+      }
+    }
+
+    function aiLock(){
+      let aiCount = new Array();
+      for(let i = 0;i < 6; i++)
+      {
+        aiCount[i] = 0;
+        for(let j = 0;j < 6; j++)
+        {
+          if(aiDice[j].value === i + 1)
+          {
+            aiCount[i]++;
+          }
+        }
+      }
+
+      // ^^^ can merge this logic up into that loop ^^^
+      let max = 0;
+      let maxIndex = 0;
+      for(let i = 0;i < 6; i++)
+      {
+        if(aiCount[i] >= max)
+        {
+          max = aiCount[i];
+          maxIndex = i;
+        }
+      }
+      console.log('ai has ' + max + ' dice with value ' + (maxIndex+1));
+      for(let i = 0;i < 6; i++)
+      {
+        if(aiDice[i].value === (maxIndex+1) && numaiLocked < 3)
+        {
+          aiDice[i].locked = true;
+          aiDice[i].lock.visible = true;
+          numaiLocked++;
+        }
+      }
+    }
+
+    function clearLocks(){
+      for(let i = 0;i < 6; i++)
+      {
+        numLocked = 0;
+        numaiLocked = 0;
+        playerDice[i].locked = false;
+        playerDice[i].lock.visible = false;
+        aiDice[i].locked = false;
+        aiDice[i].lock.visible = false;
+      }
+    }
 };
