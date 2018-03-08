@@ -31,10 +31,11 @@ window.onload = function() {
         game.load.image( 'dice5', 'assets/dice5.png');
         game.load.image( 'dice6', 'assets/dice6.png');
         game.load.image( 'rollbutton', 'assets/ROLL DICE.png');
+        game.load.image( 'lockbutton', 'assets/LOCKNROLL.png');
         game.load.image( 'rulesbutton', 'assets/RULES.png');
         game.load.image( 'newgamebutton', 'assets/NEWGAME.png');
         game.load.image( 'scoresheet', 'assets/scoresheet.png');
-        game.load.image( 'rulesscreen', 'assets/rulesscreen.png');
+        game.load.image( 'rulesscreen', 'assets/rulesupdated.png');
         game.load.image( 'lock', 'assets/LOCK.png');
     }
 
