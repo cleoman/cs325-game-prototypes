@@ -61,13 +61,14 @@ window.onload = function() {
     let lockPhase = 0;
     let numLocked = 0;
     let numaiLocked = 0;
+    let rollButton;
 
     function create() {
 
         // graphics
         let tileSprite = game.add.tileSprite(0, 0, 1000, 600, 'background');
-        let rollButton = game.add.button(40, 500, 'rollbutton', rollPlayerDice);
-        let lockinButton = game.add.button(40, 500, 'rollbutton', doLock);
+        rollButton = game.add.button(40, 500, 'rollbutton', rollPlayerDice);
+        let lockinButton = game.add.button(40, 500, 'lockbutton', doLock);
         lockinButton.visible = false;
         let rulesButton = game.add.button(760, 500, 'rulesbutton', showRules);
         newgameButton = game.add.button(40, 400, 'newgamebutton', newGame);
@@ -177,9 +178,11 @@ window.onload = function() {
           scoreDice();
           currentTurn++;
           lockPhase = 0;
+          rollButton.loadTexture('rollbutton');
           clearLocks();
         }else{
           lockPhase = 1;
+          rollButton.loadTexture('lockbutton')
           aiLock();
         }
         if(currentTurn === MAX_TURNS){
