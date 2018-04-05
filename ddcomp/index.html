@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Chicken lays eggs</title>
+    <title>Finger Twister</title>
     <script src="js/phaser.js"></script>
     <script src="js/main.js"></script>
 
@@ -28,14 +28,14 @@ body
 <li><strong>Originality:</strong>
 What is original about your game?
 <ul>
-  <li>A dice game with rules that at least I haven't heard used before.</li>
+  <li>A twist on the DDR style game to attempt to make it a versus game.</li>
 </ul>
 </li>
 
 <li><strong>Technical Merit:</strong>
 What is interesting about your game technology?
 <ul>
-  <li>Random dice rolling and scoring.</li>
+  <li>Nothing quite yet.</li>
 </ul>
 </li>
 
@@ -43,8 +43,10 @@ What is interesting about your game technology?
 What did you learn from this prototype?
 What was the easiest or hardest part of making it?
 <ul>
-  <li>Even the simplest ideas can turn out to be challenging. Also, I need to start sourcing art from other places because I'm spending too much time on the art (as awful as it is).</li>
-  <li>Hardest part: I tried to implement looking for straights and other dice combinations, but was unable to get the logic working.</li>
+  <li>Much harder to playtest something that is only two players.</li>
+  <li>Easiest part: Once I had an idea of what I wanted to happen the logic and implementation was very simple.</li>
+  <li>Hardest part: I need to find a way to motivate players to actually send notes. Maybe the only way to score is to get notes past your opponent, not to match notes?</li>
+  <li>^^^ I implemented the above without testing it so I hope that works out.^^^</li>
 </ul>
 </li>
 
@@ -52,8 +54,8 @@ What was the easiest or hardest part of making it?
 Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
 <ul>
 <li> Art Source: My artistic genius </li>
-<li> Dice Sounds: <a href="https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips">opengameart.org</a></li>
-<li> Music: <a href="https://www.youtube.com/watch?v=c7vthARjFWg">youtube</a></li>
+<li> Ding sound: <a href="https://opengameart.org/content/6-user-interface-ding-clicks"> ding.</a></li>
+<!-- <li> Music: <a href="https://www.youtube.com/watch?v=c7vthARjFWg">youtube</a></li> -->
 
 
 </ul>
@@ -62,63 +64,61 @@ Did you make your prototype assets from scratch? Did you borrow them? Cite your 
 <li><strong>Prototype Closest Other Game:</strong>
 Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
 <ul>
-  <li> It resembles, on purpose, most analog dice games played.</li>
-  <li> Iterated on past game: <a href="https://cleoman.github.io/cs325-game-prototypes/da2iteration/">here</a>.
+  <li> Core gameplay resembles DDR. (without the music right now)</li>
 </ul>
 </li>
 
 <li><strong>High Concept:</strong>
 A one-sentence summary of your game.
 <ul>
-  <li> Beat the computer in a game of dice with simple rules. </li>
+  <li> Compete with your friend in a DDR style game.</li>
 </ul>
 </li>
 
 <li><strong>Theme:</strong>
 State which of the Storymatic themes you used.
 <ul>
-  <li> Gambler. </li>
+  <li> </li>
 </ul>
 </li>
 
 <li><strong>Mandated Variety:</strong>
 State which input, randomness, genre, and play style you used in this prototype.
 <ul>
-  <li>Input: Button, kind of.</li>
-  <li>Randomness: Mixture.</li>
+  <li>Input: Keyboard</li>
+  <li>Randomness: Deterministic.</li>
   <li>Play style:  </li>
-  <li>Genre: Board</li>
+  <li>Genre: </li>
 </ul>
 </li>
 
 <li><strong>Prototype Goal:</strong>
 What game mechanic is this prototype evaluating?
 <ul>
-  <li> Board game mechanics in a digital setting. </li>
+  <li> I wanted players to have to balance when to be offensive and when to be 'defensive'. </li>
 </ul>
 </li>
 
 <li><strong>Player Experience Goals:</strong>
 What experience do you want players to have when playing your game?
 <ul>
-  <li>Experience the fun of a simple dice game.</li>
+  <li>Competitive drive to beat their opponent.</li>
 </ul>
 </li>
 
 <li><strong>Gameplay:</strong>
 A paragraph describing the actions the player can perform, the system dynamics, and the core mechanic. Include a concise explanation of the prototype’s inputs and their expected effects (how to play). You can also describe game play that is not in the prototype. You may include mock-up images for parts of the game not in the prototype.
 <ul>
-  <li>The player can currently roll the dice and have their roll scored, and then enter a lock phase that adds a little bit of strategy element to the game. There is also a basic computer opponent that makes choices on what to lock.</li>
-  <li>I wanted to fully implement the rules of a game called Farkle: <a href="https://en.wikipedia.org/wiki/Farkle">wikipedia.</a></li>
-  <li>During this iteration I was able to add the lock phase of the game, but did not alter the scoring mechanics.</li>
-  <li></li>
+  <li>Players can match notes sent by their opponent, and send notes to their opponent. Player 1 uses QWE to match notes and ASD to send notes, and player 2 uses UIO to match notes and JKL to send notes.</li>
+  <li>I would like to progressively increase the speed at which you can send notes to your opponent. Right now it is locked at roughly 3/sec.</li>
+  <li>I would also like to add a rudimentary AI for lonely playtesters.</li>
 </ul>
 </li>
 
 <li><strong>Strategies:</strong>
 What player strategies do you expect will be effective at playing this game?
 <ul>
-  <li>Roll the dice. The biggest question is when and when not to lock the dice. For example, if you roll two 1's, it's not realistically worth it to lock those two 1's as three 1's is only worth 100 points itself, and you will have spent all of those points on locks.</li>
+  <li> I think playing as defensively as possible will be the most successful strategy.</li>
 </ul>
 </li>
 
@@ -126,14 +126,14 @@ What player strategies do you expect will be effective at playing this game?
 A paragraph about the world your game is set in and who the characters are. What makes the game world and its occupants unique and interesting? Do the tokens represent something? If the game has a backstory, mention it here. If the game is abstract, then say so.
 How will the dramatic tension interact with the gameplay tension?
 <ul>
-  <li>No story, it's just a board game.</li>
+  <li>No story.</li>
 </ul>
 </li>
 
 <li><strong>Target Audience:</strong>
 A single sentence that describes the demographic you're trying to reach.
 <ul>
-  <li>People who love dice games.</li>
+  <li>People who love DDR games.</li>
 </ul>
 </li>
 

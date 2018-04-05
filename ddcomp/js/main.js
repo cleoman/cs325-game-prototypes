@@ -18,6 +18,12 @@ window.onload = function() {
     {
         game.load.spritesheet('letters', 'assets/leddars.png', 100, 100, 12);
         game.load.spritesheet('lettersgrn', 'assets/leddarsgrn.png', 100, 100, 12);
+        game.load.image('bg', 'assets/bg.png');
+        game.load.image('instr', 'assets/instructions.png');
+        game.load.image('p1win', 'assets/p1win.png');
+        game.load.image('p2win', 'assets/p2win.png');
+
+        game.load.audio('ding', 'assets/dingCling-positive.ogg');
     }
 
     let player1arrows = new Array();
@@ -36,6 +42,8 @@ window.onload = function() {
     let player2score = 0;
     let player2scoretext;
 
+    let ding;
+
     function create()
     {
 
@@ -45,6 +53,10 @@ window.onload = function() {
       // player1arrows.push(game.add.sprite(280, 0, 'letters'));
       // player1arrows[2].frame = 2;
 
+      // background and audio
+      let bg = game.add.sprite(0,0,'bg');
+      ding = game.add.audio('ding');
+      ding.volume = 0.4;
 
       // 'goal' boxes
       let qgrn = game.add.sprite(40, 460, 'lettersgrn');
@@ -98,6 +110,13 @@ window.onload = function() {
       player2scoretext = game.add.text(450, 500, "P2 Score: 0", style);
       player2scoretext.curScore = 0;
 
+      //rules screen instructions
+      let instr = game.add.sprite(0,0, 'instr');
+      instr.inputEnabled = true;
+      instr.events.onInputDown.add(function(){
+        instr.destroy();
+      }, this);
+
     }
 
     function update()
@@ -113,14 +132,14 @@ window.onload = function() {
           if(player1arrows[0].y > 510){
             let temp = player1arrows.shift();
             temp.destroy();
-            player1score--;
+            player2score++;
           }
         }
         if(player2arrows.length > 0){
           if(player2arrows[0].y > 510){
             let temp = player2arrows.shift();
             temp.destroy();
-            player2score--;
+            player1score++;
           }
         }
 
@@ -133,9 +152,45 @@ window.onload = function() {
           player2scoretext.curScore = player2score;
         }
 
+        if(player1score >= 25)
+        {
+          player1score = 0;
+          player2score = 0;
+          let p1win = game.add.sprite(0,0, 'p1win');
+          p1win.inputEnabled = true;
+          p1win.events.onInputDown.add(function(){
+            p1win.destroy();
+          }, this);
+        }
+        else if(player2score >= 25)
+        {
+          player1score = 0;
+          player2score = 0;
+          let p2win = game.add.sprite(0,0, 'p2win');
+          p2win.inputEnabled = true;
+          p2win.events.onInputDown.add(function(){
+            p2win.destroy();
+          }, this);
+        }
+
 
 
     }
+
+    function clearArrays(){
+      for(let i = 0; i < player1arrows; i++)
+      {
+        player1arrows[i].destroy();
+      }
+      for(let i = 0; i < player2arrows; i++)
+      {
+        player2arrows[i].destroy();
+      }
+
+      player1arrows = new Array();
+      player2arrows = new Array();
+    }
+
     function keyqdown()
     {
       keydown('q');
@@ -218,12 +273,13 @@ window.onload = function() {
           let temp = player1arrows.shift();
           if(temp.y > 420 && temp.y < 500 && temp.frame == compareframe)
           {
-            player1score++;
+            //player1score++;
             temp.destroy();
+            ding.play();
           }
           else
           {
-            player1score--;
+            //player1score--;
             temp.destroy();
           }
         }
@@ -244,11 +300,12 @@ window.onload = function() {
           let temp = player2arrows.shift();
           if(temp.y > 420 && temp.y < 500 && temp.frame == compareframe)
           {
-            player2score++;
+            //player2score++;
             temp.destroy();
+            ding.play();
           }
           else {
-            player2score--;
+            //player2score--;
             temp.destroy();
           }
         }
