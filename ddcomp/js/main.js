@@ -279,7 +279,7 @@ window.onload = function() {
           }
           else
           {
-            //player1score--;
+            player2score++;
             temp.destroy();
           }
         }
@@ -305,7 +305,7 @@ window.onload = function() {
             ding.play();
           }
           else {
-            //player2score--;
+            player1score++;
             temp.destroy();
           }
         }
