@@ -33,7 +33,7 @@ window.onload = function() {
     let player1ls = Date.now();
     let player2ls = Date.now();
 
-    let timebetweenp1 = 333;
+    let timebetweenp1 = 500;
     let timebetweenp2 = timebetweenp1;
     let scrolltime = 2000;
 
