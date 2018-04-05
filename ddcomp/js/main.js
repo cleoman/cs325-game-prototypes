@@ -27,11 +27,14 @@ window.onload = function() {
     let player1ls = Date.now();
     let player2ls = Date.now();
 
-    let timebetweenp1 = 500;
-    let timebetweenp2 = 500;
+    let timebetweenp1 = 333;
+    let timebetweenp2 = timebetweenp1;
     let scrolltime = 2000;
 
     let player1score = 0;
+    let player1scoretext;
+    let player2score = 0;
+    let player2scoretext;
 
     function create()
     {
@@ -42,12 +45,13 @@ window.onload = function() {
       // player1arrows.push(game.add.sprite(280, 0, 'letters'));
       // player1arrows[2].frame = 2;
 
+
+      // 'goal' boxes
       let qgrn = game.add.sprite(40, 460, 'lettersgrn');
       let wgrn = game.add.sprite(160, 460, 'lettersgrn');
       wgrn.frame = 1;
       let egrn = game.add.sprite(280, 460, 'lettersgrn');
       egrn.frame = 2;
-
       let ugrn = game.add.sprite(620, 460, 'lettersgrn');
       ugrn.frame = 6;
       let igrn = game.add.sprite(740, 460, 'lettersgrn');
@@ -80,9 +84,20 @@ window.onload = function() {
       keyd.onDown.add(keyddown, this);
 
       //player 2 key funcs
+      keyu.onDown.add(keyudown, this);
+      keyi.onDown.add(keyidown, this);
+      keyo.onDown.add(keyodown, this);
       keyj.onDown.add(keyjdown, this);
       keyk.onDown.add(keykdown, this);
       keyl.onDown.add(keyldown, this);
+
+      //game text
+      var style = { font: "24px Arial", fill: "#ff0044", align: "center" };
+      player1scoretext = game.add.text(450, 100, "P1 Score: 0", style);
+      player1scoretext.curScore = 0;
+      player2scoretext = game.add.text(450, 500, "P2 Score: 0", style);
+      player2scoretext.curScore = 0;
+
     }
 
     function update()
@@ -93,6 +108,32 @@ window.onload = function() {
         // This function returns the rotation angle that makes it visually match its
         // new trajectory.
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+
+        if(player1arrows.length > 0){
+          if(player1arrows[0].y > 510){
+            let temp = player1arrows.shift();
+            temp.destroy();
+            player1score--;
+          }
+        }
+        if(player2arrows.length > 0){
+          if(player2arrows[0].y > 510){
+            let temp = player2arrows.shift();
+            temp.destroy();
+            player2score--;
+          }
+        }
+
+        if(player1scoretext.curScore != player1score){
+          player1scoretext.text = "P1 Score: " + player1score;
+          player1scoretext.curScore = player1score;
+        }
+        if(player2scoretext.curScore != player2score){
+          player2scoretext.text = "P2 Score: " + player2score;
+          player2scoretext.curScore = player2score;
+        }
+
+
 
     }
     function keyqdown()
@@ -144,6 +185,21 @@ window.onload = function() {
       keydown('l');
     }
 
+    function keyudown()
+    {
+      keydown('u');
+    }
+
+    function keyidown()
+    {
+      keydown('i');
+    }
+
+    function keyodown()
+    {
+      keydown('o');
+    }
+
     function keydown(key)
     {
       if(key == 'q' || key == 'w' || key == 'e')
@@ -168,6 +224,31 @@ window.onload = function() {
           else
           {
             player1score--;
+            temp.destroy();
+          }
+        }
+      }
+      if(key == 'u' || key == 'i' || key == 'o')
+      {
+        if(player2arrows.length > 0){
+          let compareframe = 6;
+          if(key == 'i')
+          {
+            compareframe = 7;
+          }
+          if(key == 'o')
+          {
+            compareframe = 8;
+          }
+
+          let temp = player2arrows.shift();
+          if(temp.y > 420 && temp.y < 500 && temp.frame == compareframe)
+          {
+            player2score++;
+            temp.destroy();
+          }
+          else {
+            player2score--;
             temp.destroy();
           }
         }
