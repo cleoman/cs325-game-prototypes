@@ -33,9 +33,12 @@ window.onload = function() {
     let player1ls = Date.now();
     let player2ls = Date.now();
 
-    let timebetweenp1 = 500;
+    let originaltb = 500;
+    let timebetweenp1 = originaltb;
     let timebetweenp2 = timebetweenp1;
     let scrolltime = 2000;
+
+    let droptime = '+1000';
 
     let player1score = 0;
     let player1scoretext;
@@ -146,10 +149,12 @@ window.onload = function() {
         if(player1scoretext.curScore != player1score){
           player1scoretext.text = "P1 Score: " + player1score;
           player1scoretext.curScore = player1score;
+          timebetweenp2 -= 10;
         }
         if(player2scoretext.curScore != player2score){
           player2scoretext.text = "P2 Score: " + player2score;
           player2scoretext.curScore = player2score;
+          timebetweenp1 -= 10;
         }
 
         if(player1score >= 25)
@@ -161,6 +166,8 @@ window.onload = function() {
           p1win.events.onInputDown.add(function(){
             p1win.destroy();
           }, this);
+          timebetweenp1 = originaltb;
+          timebetweenp2 = originaltb;
         }
         else if(player2score >= 25)
         {
@@ -171,6 +178,8 @@ window.onload = function() {
           p2win.events.onInputDown.add(function(){
             p2win.destroy();
           }, this);
+          timebetweenp1 = originaltb;
+          timebetweenp2 = originaltb;
         }
 
 
