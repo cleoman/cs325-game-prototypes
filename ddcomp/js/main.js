@@ -42,8 +42,10 @@ window.onload = function() {
 
     let player1score = 0;
     let player1scoretext;
+    let player1delaytext;
     let player2score = 0;
     let player2scoretext;
+    let player2delaytext;
 
     let ding;
 
@@ -108,9 +110,13 @@ window.onload = function() {
 
       //game text
       var style = { font: "24px Arial", fill: "#ff0044", align: "center" };
+
       player1scoretext = game.add.text(450, 100, "P1 Score: 0", style);
       player1scoretext.curScore = 0;
-      player2scoretext = game.add.text(450, 500, "P2 Score: 0", style);
+      player1delaytext = game.add.text(450, 200, "P1 Delay: " + timebetweenp1 + "ms");
+      
+      player2scoretext = game.add.text(450, 400, "P2 Score: 0", style);
+      player2delaytext = game.add.text(450, 500, "P2 Delay: " + timebetwenp2 + "ms");
       player2scoretext.curScore = 0;
 
       //rules screen instructions
