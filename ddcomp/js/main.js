@@ -37,6 +37,7 @@ window.onload = function() {
     let timebetweenp1 = originaltb;
     let timebetweenp2 = timebetweenp1;
     let scrolltime = 2000;
+    let tbdelta = 10;
 
     let droptime = '+1000';
 
@@ -111,13 +112,15 @@ window.onload = function() {
       //game text
       var style = { font: "24px Arial", fill: "#ff0044", align: "center" };
 
-      player1scoretext = game.add.text(450, 100, "P1 Score: 0", style);
+      player1scoretext = game.add.text(425, 100, "P1 Score: 0", style);
       player1scoretext.curScore = 0;
-      player1delaytext = game.add.text(450, 200, "P1 Delay: " + timebetweenp1 + "ms");
-      
-      player2scoretext = game.add.text(450, 400, "P2 Score: 0", style);
-      player2delaytext = game.add.text(450, 500, "P2 Delay: " + timebetwenp2 + "ms");
+      player1delaytext = game.add.text(425, 200, "P1 Delay: " + timebetweenp1 + "ms", style);
+      player1delaytext.curDelay = timebetweenp1;
+
+      player2scoretext = game.add.text(425, 400, "P2 Score: 0", style);
+      player2delaytext = game.add.text(425, 500, "P2 Delay: " + timebetweenp2 + "ms", style);
       player2scoretext.curScore = 0;
+      player2delaytext.curDelay = timebetweenp2;
 
       //rules screen instructions
       let instr = game.add.sprite(0,0, 'instr');
@@ -155,12 +158,14 @@ window.onload = function() {
         if(player1scoretext.curScore != player1score){
           player1scoretext.text = "P1 Score: " + player1score;
           player1scoretext.curScore = player1score;
-          timebetweenp2 -= 10;
+          timebetweenp2 -= tbdelta;
+          player2delaytext.text = "P2 Delay: " + timebetweenp2 + "ms";
         }
         if(player2scoretext.curScore != player2score){
           player2scoretext.text = "P2 Score: " + player2score;
           player2scoretext.curScore = player2score;
-          timebetweenp1 -= 10;
+          timebetweenp1 -= tbdelta;
+          player1delaytext.text = "P1 Delay: " + timebetweenp1 + "ms";
         }
 
         if(player1score >= 25)
