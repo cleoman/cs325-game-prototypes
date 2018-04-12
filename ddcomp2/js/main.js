@@ -66,6 +66,7 @@ window.onload = function() {
       ding.volume = 0.4;
 
       let bgm = game.add.audio('bgm');
+      bgm.loop = true;
       bgm.volume = 0.1;
 
 
