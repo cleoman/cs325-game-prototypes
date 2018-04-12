@@ -24,6 +24,7 @@ window.onload = function() {
         game.load.image('p2win', 'assets/p2win.png');
 
         game.load.audio('ding', 'assets/dingCling-positive.ogg');
+        game.load.audio('bgm', 'assets/bgm.mp3');
     }
 
     let player1arrows = new Array();
@@ -63,6 +64,10 @@ window.onload = function() {
       let bg = game.add.sprite(0,0,'bg');
       ding = game.add.audio('ding');
       ding.volume = 0.4;
+
+      let bgm = game.add.audio('bgm');
+      bgm.volume = 0.1;
+
 
       // 'goal' boxes
       let qgrn = game.add.sprite(40, 460, 'lettersgrn');
@@ -110,7 +115,7 @@ window.onload = function() {
       keyl.onDown.add(keyldown, this);
 
       //game text
-      var style = { font: "24px Arial", fill: "#ff0044", align: "center" };
+      let style = { font: "24px Arial", fill: "#ff0044", align: "center" };
 
       player1scoretext = game.add.text(425, 100, "P1 Score: 0", style);
       player1scoretext.curScore = 0;
@@ -126,6 +131,7 @@ window.onload = function() {
       let instr = game.add.sprite(0,0, 'instr');
       instr.inputEnabled = true;
       instr.events.onInputDown.add(function(){
+        bgm.play();
         instr.destroy();
       }, this);
 
@@ -142,6 +148,9 @@ window.onload = function() {
 
         if(player1arrows.length > 0){
           if(player1arrows[0].y > 510){
+            let style = { font: "36px Arial", fill: "red", align: "center" };
+            let feedbackText = game.add.text(200, 300, "Oops!", style);
+            game.time.events.add(0 , function() {   game.add.tween(feedbackText).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);}, this);
             let temp = player1arrows.shift();
             temp.destroy();
             player2score++;
@@ -149,6 +158,9 @@ window.onload = function() {
         }
         if(player2arrows.length > 0){
           if(player2arrows[0].y > 510){
+            let style = { font: "36px Arial", fill: "red", align: "center" };
+            let feedbackText = game.add.text(800, 300, "Oops!", style);
+            game.time.events.add(0 , function() {   game.add.tween(feedbackText).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);}, this);
             let temp = player2arrows.shift();
             temp.destroy();
             player1score++;
@@ -293,12 +305,18 @@ window.onload = function() {
           let temp = player1arrows.shift();
           if(temp.y > 420 && temp.y < 500 && temp.frame == compareframe)
           {
+            let style = { font: "36px Arial", fill: "red", align: "center" };
+            let feedbackText = game.add.text(200, 300, "Nice!", style);
+            game.time.events.add(0 , function() {   game.add.tween(feedbackText).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);}, this);
             //player1score++;
             temp.destroy();
             ding.play();
           }
           else
           {
+            let style = { font: "36px Arial", fill: "red", align: "center" };
+            let feedbackText = game.add.text(200, 300, "Oops!", style);
+            game.time.events.add(0 , function() {   game.add.tween(feedbackText).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);}, this);
             player2score++;
             temp.destroy();
           }
@@ -320,11 +338,17 @@ window.onload = function() {
           let temp = player2arrows.shift();
           if(temp.y > 420 && temp.y < 500 && temp.frame == compareframe)
           {
+            let style = { font: "36px Arial", fill: "red", align: "center" };
+            let feedbackText = game.add.text(800, 300, "Nice!", style);
+            game.time.events.add(0 , function() {   game.add.tween(feedbackText).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);}, this);
             //player2score++;
             temp.destroy();
             ding.play();
           }
           else {
+            let style = { font: "36px Arial", fill: "red", align: "center" };
+            let feedbackText = game.add.text(800, 300, "Oops!", style);
+            game.time.events.add(0 , function() {   game.add.tween(feedbackText).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);}, this);
             player1score++;
             temp.destroy();
           }
