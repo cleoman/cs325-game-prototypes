@@ -282,7 +282,9 @@ window.onload = function() {
             hand[i].obj.visible = true;
             hand[i].obj.alpha = 0;
             let temp = hand[i].obj;
-            game.add.tween(temp).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+            game.time.events.add(500 * i, function() {
+                game.add.tween(temp).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+            }, this);
         }
         console.log(hand);
         hand[0].obj.x = 60;
