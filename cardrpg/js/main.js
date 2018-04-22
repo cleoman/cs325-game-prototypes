@@ -21,6 +21,8 @@ window.onload = function() {
         game.load.image('playerwon', 'assets/playerwon.png');
         game.load.image('enemywon', 'assets/enemywon.png');
 
+
+        game.load.image('instructions', 'assets/instructions.png');
         game.load.image('screen', 'assets/rpgscreen.png');
 
     }
@@ -96,7 +98,7 @@ window.onload = function() {
             {
                 console.log("here");
                 // Generate five smash
-                let temp = new card("Smash", "smash", 6, 2, 0, 0, 1);
+                let temp = new card("Smash", "smash", 6, 3, 0, 0, 1);
                 deck.push(temp);
 
             }
@@ -104,21 +106,21 @@ window.onload = function() {
             for(let i = 5;i < 10;i++)
             {
                 // Five Slash
-                let temp = new card("Slash","slash",12,3,0,0,2);
+                let temp = new card("Slash","slash",12,2,0,0,2);
                 deck.push(temp);
             }
         
             for(let i = 10; i < 15;i++)
             {
                 // Five Block
-                let temp = new card("Block","block",0,0,6,1,1);
+                let temp = new card("Block","block",0,0,6,2,1);
                 deck.push(temp);
             }
         
             for(let i = 15;i < 20;i++)
             {
                 // Five Hunker Down
-                let temp = new card("Hunker Down", "hunker_down",0,0,12,2,2);
+                let temp = new card("Hunker Down", "hunker_down",0,0,12,1,2);
                 deck.push(temp);
             }
 
@@ -139,18 +141,20 @@ window.onload = function() {
         drawCards();
         enemyDecide();
 
+        let instructions = game.add.sprite(0,0, 'instructions');
+        instructions.inputEnabled = true;
+        instructions.input.useHandCursor = true;
+        instructions.events.onInputDown.add(function(){
+            instructions.destroy();
+        }, this);
+
     }
 
 
 
     function update()
     {
-        // Accelerate the 'logo' sprite towards the cursor,
-        // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
-        // in X or Y.
-        // This function returns the rotation angle that makes it visually match its
-        // new trajectory.
-        //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+
 
         pc.hpText.text = "" + pc.hp + "/" + pc.maxhp + "hp";
         ec.hpText.text = "" + ec.hp + "/" + ec.maxhp + "hp";
@@ -206,7 +210,9 @@ window.onload = function() {
             let toDiscard = hand.length;
             for(let i = 0; i < toDiscard; i++)
             {
-                discard.push(hand.pop());
+                let temp = hand.pop();
+                temp.visible = false;
+                discard.push(temp);
             }
         }
 
@@ -363,6 +369,11 @@ window.onload = function() {
         let blockDo = 0;
         console.log("Doing card: " + card.name);
 
+
+        let dmgStyle = { font: "50pt Comic Sans", fill: "red", align: "left" };
+        let blockStyle = { font: "50pt Comic Sans", fill: "white", align: "left" };
+
+
         if(pc.ap >= card.ap)
         {
             pc.ap -= card.ap;
@@ -378,12 +389,35 @@ window.onload = function() {
                 blockDo += game.rnd.integerInRange(1, card.blockrange);
             }
             blockDo += card.flatblock;
+
+            if(dmgDo > 0)
+            {
+                let dmgText = game.add.text(card.obj.x+75,card.obj.y+100,"" + dmgDo, dmgStyle);
+                game.add.tween(dmgText).to({alpha:0}, 1000, Phaser.Easing.Linear.None, true);
+                game.time.events.add(600, function(){
+                    dmgText.destroy();
+                }, this);
+            }
+
+            if(blockDo > 0)
+            {
+                let blockText = game.add.text(card.obj.x+75, card.obj.y+100,"" + blockDo, blockStyle);
+                game.add.tween(blockText).to({alpha:0}, 1000, Phaser.Easing.Linear.None, true);
+                game.time.events.add(600, function(){
+                    blockText.destroy();
+                }, this);
+            }
+            card.obj.visible = false;
         }
+
+
 
         pc.dmg += dmgDo;
         pc.block += blockDo;
 
-        // card.obj.visible = false;
+
+
+        
     }
 
 };
