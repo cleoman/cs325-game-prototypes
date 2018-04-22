@@ -18,11 +18,11 @@ window.onload = function() {
         game.load.image('slash', 'assets/slash.png');
         game.load.image('block', 'assets/block.png');
         game.load.image('hunker_down', 'assets/hunker_down.png');
+        game.load.image('playerwon', 'assets/playerwon.png');
+        game.load.image('enemywon', 'assets/enemywon.png');
 
         game.load.image('screen', 'assets/rpgscreen.png');
 
-        game.load.audio('ding', 'assets/dingCling-positive.ogg');
-        game.load.audio('bgm', 'assets/bgm.mp3');
     }
 
     function card(name, img, dmgrange, flatdmg, blockrange, flatblock, ap)
@@ -53,6 +53,7 @@ window.onload = function() {
         this.maxhp = maxhp;
         this.hp = maxhp;
         this.block = 0;
+        this.dmg = 0;
     }
 
     let deck = new Array();
@@ -70,10 +71,18 @@ window.onload = function() {
         console.log("am here");
         let bgscreen = game.add.sprite(0,0, "screen");
         let hpStyle = { font: "26pt Comic Sans", fill: "yellow", align: "left" };
+        let dmgStyle = { font: "14pt Comic Sans", fill: "white", align: "left" };
         let etStyle = { font: "38pt Arial", fill: "red", align: "left"}
         pc.hpText = game.add.text( 150, 10, "" + pc.hp + "/" + pc.maxhp + "hp", hpStyle);
         pc.apText = game.add.text( 300, 380, "AP: " + pc.ap, hpStyle);
         ec.hpText = game.add.text( 775, 10, "" + ec.hp + "/" + ec.maxhp + "hp", hpStyle);
+
+        pc.dmgText = game.add.text( 350, 10, "Player doing "+pc.dmg+" dmg", dmgStyle);
+        pc.blocktext = game.add.text( 350, 30, "Player blocking "+pc.block+" dmg", dmgStyle);
+        ec.dmgText = game.add.text( 450, 250, "Enemy doing "+ec.dmg+" dmg", dmgStyle);
+        ec.blockText = game.add.text( 450, 270, "Enemy blocking "+ec.block+" dmg", dmgStyle);
+        
+        
         endTurnText = game.add.text(400, 370, "END TURN", etStyle);
         
         endTurnText.inputEnabled = true;
@@ -128,6 +137,7 @@ window.onload = function() {
         console.log(deck);
         shuffleDeck(deck);
         drawCards();
+        enemyDecide();
 
     }
 
@@ -145,6 +155,21 @@ window.onload = function() {
         pc.hpText.text = "" + pc.hp + "/" + pc.maxhp + "hp";
         ec.hpText.text = "" + ec.hp + "/" + ec.maxhp + "hp";
         pc.apText.text = "AP: " + pc.ap;
+
+        pc.dmgText.text = "Player doing "+pc.dmg+" dmg";
+        pc.blocktext.text = "Player blocking "+pc.block+" dmg";
+        ec.dmgText.text = "Enemy doing "+ec.dmg+" dmg";
+        ec.blockText.text = "Enemy blocking "+ec.block+" dmg";
+
+        if(ec.hp <= 0)
+        {
+            /* player win */
+        }
+        else if(pc.hp <= 0)
+        {
+            /* enemy win */
+        }
+
 
 
     }
@@ -177,11 +202,26 @@ window.onload = function() {
   
     function drawCards()
     {
-        let hand = new Array();
         let xsp = 220;
         for(let i = 0; i < 4; i++)
         {
-            hand.push(deck.pop());
+            if(deck.length > 0)
+            {
+                hand.push(deck.pop());
+            }
+            else
+            {
+                let discardAmt = discard.length;
+                for(let j = 0; j < discardAmt; j++)
+                {
+                    deck.push(discard.pop());
+                    //shuffleDeck(deck);
+                }
+                shuffleDeck(deck);
+                hand.push(deck.pop());
+                console.log("discard -> deck");
+                console.log(hand);
+            }
         }
         for(let i = 0; i < 4; i++)
         {
@@ -201,6 +241,57 @@ window.onload = function() {
     function endTurn()
     {
         console.log("end turn");
+        let damageDone = pc.dmg - ec.block;
+        if(damageDone > 0)
+        {
+            ec.hp -= damageDone;
+        }
+        damageDone = ec.dmg - pc.block;
+        if(damageDone > 0)
+        {
+            pc.hp -= damageDone;
+        }
+        for(let i = 0; i < 4; i++)
+        {
+            let temp = hand.pop();
+            temp.obj.visible = false;
+            discard.push(temp);
+        }
+        pc.dmg = 0;
+        pc.block = 0;
+        pc.ap = pc.maxap;
+        ec.dmg = 0;
+        ec.block = 0;
+
+        drawCards();
+        enemyDecide();
+    }
+
+    function enemyDecide()
+    {
+        let dmgDo = 0;
+        let blockDo = 0;
+        let whatdo = game.rnd.integerInRange(0,100);
+        if(whatdo < 40)
+        {
+            dmgDo += 10;
+        }
+        else if(whatdo < 80)
+        {
+            blockDo += 10;
+        }
+        else if(whatdo < 90)
+        {
+            dmgDo += 20;
+        }
+        else
+        {
+            blockDo += 20;
+        }
+        ec.dmg = dmgDo;
+        ec.block = blockDo;
+
+
     }
 
     function doCard(card)
@@ -229,7 +320,8 @@ window.onload = function() {
             blockDo += card.flatblock;
         }
 
-        
+        pc.dmg += dmgDo;
+        pc.block += blockDo;
 
         // card.obj.visible = false;
     }
