@@ -36,53 +36,95 @@ window.onload = function() {
         this.ap = ap; // ap cost integer
     }
 
+    function Player(name,maxhp,maxap)
+    {
+        this.maxhp = maxhp;
+        this.hp = maxhp;
+        this.maxap = maxap;
+        this.ap = maxap;
+        this.name = name;
+        this.block = 0;
+        this.dmg = 0;
+    }
+
+    function Enemy(name,maxhp)
+    {
+        this.name = name;
+        this.maxhp = maxhp;
+        this.hp = maxhp;
+        this.block = 0;
+    }
+
     let deck = new Array();
     let discard = new Array();
-
+    let hand = new Array();
+    let pc = new Player("Monty", 45, 3);
+    let ec = new Enemy("Bad Guy", 30);
+    let hpText;
+    let apText;
+    let enemyHpText;
+    let endTurnText;
 
     function create()
     {
         console.log("am here");
         let bgscreen = game.add.sprite(0,0, "screen");
+        let hpStyle = { font: "26pt Comic Sans", fill: "yellow", align: "left" };
+        let etStyle = { font: "38pt Arial", fill: "red", align: "left"}
+        pc.hpText = game.add.text( 150, 10, "" + pc.hp + "/" + pc.maxhp + "hp", hpStyle);
+        pc.apText = game.add.text( 300, 380, "AP: " + pc.ap, hpStyle);
+        ec.hpText = game.add.text( 775, 10, "" + ec.hp + "/" + ec.maxhp + "hp", hpStyle);
+        endTurnText = game.add.text(400, 370, "END TURN", etStyle);
         
+        endTurnText.inputEnabled = true;
+        endTurnText.input.useHandCursor = true;
+        endTurnText.events.onInputDown.add(endTurn, this);
 
 
-        for(let i = 0;i < 5;i++)
-        {
-            console.log("here");
-            // Generate five smash
-            let temp = new card("Smash", "smash", 6, 2, 0, 0, 1);
-            deck.push(temp);
+        { // generate the deck
 
-        }
-    
-        for(let i = 5;i < 10;i++)
-        {
-            // Five Slash
-            let temp = new card("Slash","slash",12,3,0,0,2);
-            deck.push(temp);
-        }
-    
-        for(let i = 10; i < 15;i++)
-        {
-            // Five Block
-            let temp = new card("Block","block",0,0,6,1,1);
-            deck.push(temp);
-        }
-    
-        for(let i = 15;i < 20;i++)
-        {
-            // Five Hunker Down
-            let temp = new card("Hunker Down", "hunker_down",0,0,12,2,2);
-            deck.push(temp);
-        }
+            for(let i = 0;i < 5;i++)
+            {
+                console.log("here");
+                // Generate five smash
+                let temp = new card("Smash", "smash", 6, 2, 0, 0, 1);
+                deck.push(temp);
 
-        for(let i = 0; i < 20; i++)
-        {
-            deck[i].obj = game.add.sprite(0, 0, deck[i].img);
-            deck[i].obj.visible = false;
-        }
+            }
+        
+            for(let i = 5;i < 10;i++)
+            {
+                // Five Slash
+                let temp = new card("Slash","slash",12,3,0,0,2);
+                deck.push(temp);
+            }
+        
+            for(let i = 10; i < 15;i++)
+            {
+                // Five Block
+                let temp = new card("Block","block",0,0,6,1,1);
+                deck.push(temp);
+            }
+        
+            for(let i = 15;i < 20;i++)
+            {
+                // Five Hunker Down
+                let temp = new card("Hunker Down", "hunker_down",0,0,12,2,2);
+                deck.push(temp);
+            }
 
+            for(let i = 0; i < 20; i++)
+            {
+                let x = deck[i];
+                deck[i].obj = game.add.sprite(0, 0, deck[i].img);
+                deck[i].obj.visible = false;
+                deck[i].obj.inputEnabled = true;
+                deck[i].obj.events.onInputDown.add(function(){
+                    doCard(x);
+                }, this);
+                deck[i].obj.input.useHandCursor = true;
+            }
+        }
         console.log(deck);
         shuffleDeck(deck);
         drawCards();
@@ -100,8 +142,9 @@ window.onload = function() {
         // new trajectory.
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
 
-       
-
+        pc.hpText.text = "" + pc.hp + "/" + pc.maxhp + "hp";
+        ec.hpText.text = "" + ec.hp + "/" + ec.maxhp + "hp";
+        pc.apText.text = "AP: " + pc.ap;
 
 
     }
@@ -153,6 +196,42 @@ window.onload = function() {
         hand[2].obj.y = hand[0].obj.y;
         hand[3].obj.x = hand[2].obj.x + xsp;
         hand[3].obj.y = hand[0].obj.y;
+    }
+
+    function endTurn()
+    {
+        console.log("end turn");
+    }
+
+    function doCard(card)
+    {
+        /*
+            Read in card, apply the actions, finit.
+            function card(name, img, dmgrange, flatdmg, blockrange, flatblock, ap)
+        */
+        let dmgDo = 0;
+        let blockDo = 0;
+        console.log("Doing card: " + card.name);
+
+        if(pc.ap >= card.ap)
+        {
+            pc.ap -= card.ap;
+            card.obj.visible = false;
+            if(card.dmgrange > 0)
+            {
+                dmgDo += game.rnd.integerInRange(1, card.dmgrange);
+            }
+            dmgDo += card.flatdmg;
+            if(card.blockrange > 0)
+            {
+                blockDo += game.rnd.integerInRange(1, card.blockrange);
+            }
+            blockDo += card.flatblock;
+        }
+
+        
+
+        // card.obj.visible = false;
     }
 
 };
