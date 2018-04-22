@@ -163,17 +163,71 @@ window.onload = function() {
 
         if(ec.hp <= 0)
         {
+            ec.hp = ec.maxhp;
             /* player win */
+            let playerWin = game.add.sprite(0,0, 'playerwon');
+            playerWin.inputEnabled = true;
+            playerWin.events.onInputDown.add(function(){
+                resetGame();
+                playerWin.destroy();
+            }, this);
         }
         else if(pc.hp <= 0)
         {
+            pc.hp = pc.maxhp;
             /* enemy win */
+            let enemyWin = game.add.sprite(0,0, 'enemywon');
+            enemyWin.inputEnabled = true;
+            enemyWin.events.onInputDown.add(function(){
+                resetGame();
+                enemyWin.destroy();
+            }, this);
         }
 
 
 
     }
 
+    function resetGame()
+    {
+        /* fix pc, ec */
+        pc.hp = pc.maxhp;
+        pc.ap = pc.maxap;
+        pc.dmg = 0;
+        pc.block = 0;
+
+        ec.hp = ec.maxhp;
+        ec.dmg = 0;
+        ec.block = 0;
+
+        /* fix deck */
+        if(hand.length > 0)
+        {
+            let toDiscard = hand.length;
+            for(let i = 0; i < toDiscard; i++)
+            {
+                discard.push(hand.pop());
+            }
+        }
+
+        if(discard.length > 0)
+        {
+            let toDeck = discard.length;
+            for(let i = 0; i < toDeck; i++)
+            {
+                deck.push(discard.pop());
+            }
+        }
+
+        /* shuffle deck */
+        shuffleDeck(deck);
+
+        /* draw cards */
+        drawCards();
+
+        /* enemy decision logic */
+        enemyDecide();
+    }
 
     // deck shuffle function gleefully stolen from
     // https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
@@ -226,6 +280,9 @@ window.onload = function() {
         for(let i = 0; i < 4; i++)
         {
             hand[i].obj.visible = true;
+            hand[i].obj.alpha = 0;
+            let temp = hand[i].obj;
+            game.add.tween(temp).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
         }
         console.log(hand);
         hand[0].obj.x = 60;
@@ -307,7 +364,8 @@ window.onload = function() {
         if(pc.ap >= card.ap)
         {
             pc.ap -= card.ap;
-            card.obj.visible = false;
+            // card.obj.visible = false;
+            game.add.tween(card.obj).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
             if(card.dmgrange > 0)
             {
                 dmgDo += game.rnd.integerInRange(1, card.dmgrange);
