@@ -211,7 +211,7 @@ window.onload = function() {
             for(let i = 0; i < toDiscard; i++)
             {
                 let temp = hand.pop();
-                temp.visible = false;
+                temp.obj.visible = false;
                 discard.push(temp);
             }
         }
@@ -224,6 +224,7 @@ window.onload = function() {
                 deck.push(discard.pop());
             }
         }
+        
 
         /* shuffle deck */
         shuffleDeck(deck);
