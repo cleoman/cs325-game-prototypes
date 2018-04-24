@@ -20,6 +20,7 @@ window.onload = function() {
         game.load.image('hunker_down', 'assets/hunker_down.png');
         game.load.image('playerwon', 'assets/playerwon.png');
         game.load.image('enemywon', 'assets/enemywon.png');
+        game.load.image('overlay', 'assets/overlay.png');
 
 
         game.load.image('instructions', 'assets/instructions.png');
@@ -132,6 +133,18 @@ window.onload = function() {
                 deck[i].obj.inputEnabled = true;
                 deck[i].obj.events.onInputDown.add(function(){
                     doCard(x);
+                }, this);
+                deck[i].overlay = game.add.sprite(0,0,'overlay');
+                deck[i].overlay.visible = false;
+                deck[i].obj.events.onInputOver.add(function(){
+                    if(pc.ap >= x.ap){
+                        x.overlay.x = x.obj.x;
+                        x.overlay.y = x.obj.y;
+                        x.overlay.visible = true;
+                    }
+                },this);
+                deck[i].obj.events.onInputOut.add(function(){
+                    x.overlay.visible = false;
                 }, this);
                 deck[i].obj.input.useHandCursor = true;
             }
