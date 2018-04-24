@@ -168,6 +168,7 @@ window.onload = function() {
         if(ec.hp <= 0)
         {
             ec.hp = ec.maxhp;
+            pc.hp = pc.maxhp;
             /* player win */
             let playerWin = game.add.sprite(0,0, 'playerwon');
             playerWin.inputEnabled = true;
@@ -179,6 +180,7 @@ window.onload = function() {
         else if(pc.hp <= 0)
         {
             pc.hp = pc.maxhp;
+            ec.hp = ec.maxhp;
             /* enemy win */
             let enemyWin = game.add.sprite(0,0, 'enemywon');
             enemyWin.inputEnabled = true;
