@@ -21,6 +21,8 @@ window.onload = function() {
         game.load.image('playerwon', 'assets/playerwon.png');
         game.load.image('enemywon', 'assets/enemywon.png');
         game.load.image('overlay', 'assets/overlay.png');
+        game.load.image('endturn', 'assets/buttonEndTurn.png');
+        game.load.image('endturnover', 'assets/buttonEndTurnOver.png');
 
 
         game.load.image('instructions', 'assets/instructions.png');
@@ -62,7 +64,7 @@ window.onload = function() {
     let deck = new Array();
     let discard = new Array();
     let hand = new Array();
-    let pc = new Player("Monty", 45, 3);
+    let pc = new Player("Monty", 30, 3);
     let ec = new Enemy("Bad Guy", 30);
     let hpText;
     let apText;
@@ -86,11 +88,16 @@ window.onload = function() {
         ec.blockText = game.add.text( 450, 270, "Enemy blocking "+ec.block+" dmg", dmgStyle);
         
         
-        endTurnText = game.add.text(400, 370, "END TURN", etStyle);
-        
-        endTurnText.inputEnabled = true;
-        endTurnText.input.useHandCursor = true;
-        endTurnText.events.onInputDown.add(endTurn, this);
+        let endTurnBtn = game.add.sprite(550, 370, 'endturn');
+        endTurnBtn.inputEnabled = true;
+        endTurnBtn.input.useHandCursor = true;
+        endTurnBtn.events.onInputDown.add(endTurn, this);
+        endTurnBtn.events.onInputOver.add(function(){
+            endTurnBtn.loadTexture('endturnover');
+        }, this);
+        endTurnBtn.events.onInputOut.add(function(){
+            endTurnBtn.loadTexture('endturn');
+        }, this);
 
 
         { // generate the deck
@@ -423,6 +430,7 @@ window.onload = function() {
                     blockText.destroy();
                 }, this);
             }
+            
             card.obj.visible = false;
         }
 
