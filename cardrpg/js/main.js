@@ -26,7 +26,7 @@ window.onload = function() {
 
 
         game.load.image('instructions', 'assets/instructions.png');
-        game.load.image('screen', 'assets/prettyscreen.png');
+        game.load.image('screen', 'assets/cardrpgalt.png');
 
         game.load.audio('bgm', 'assets/youwouldntstealacar.mp3');
 
