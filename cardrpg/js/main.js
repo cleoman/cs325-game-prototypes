@@ -14,19 +14,21 @@ window.onload = function() {
 
     function preload()
     {
-        game.load.image('smash', 'assets/smash.png');
-        game.load.image('slash', 'assets/slash.png');
-        game.load.image('block', 'assets/block.png');
-        game.load.image('hunker_down', 'assets/hunker_down.png');
+        game.load.image('smash', 'assets/SMASHfix.png');
+        game.load.image('slash', 'assets/SLASHfix.png');
+        game.load.image('block', 'assets/BLOCKfix.png');
+        game.load.image('hunker_down', 'assets/HUNKERDOWNfix.png');
         game.load.image('playerwon', 'assets/playerwon.png');
         game.load.image('enemywon', 'assets/enemywon.png');
-        game.load.image('overlay', 'assets/overlay.png');
+        game.load.image('overlay', 'assets/overlayfix.png');
         game.load.image('endturn', 'assets/buttonEndTurn.png');
         game.load.image('endturnover', 'assets/buttonEndTurnOver.png');
 
 
         game.load.image('instructions', 'assets/instructions.png');
-        game.load.image('screen', 'assets/rpgscreen.png');
+        game.load.image('screen', 'assets/prettyscreen.png');
+
+        game.load.audio('bgm', 'assets/youwouldntstealacar.mp3');
 
     }
 
@@ -73,19 +75,24 @@ window.onload = function() {
 
     function create()
     {
+        let bgm = game.add.audio('bgm');
+        bgm.loop = true;
+        bgm.volume = 0.1;
+        bgm.play();
+
         console.log("am here");
         let bgscreen = game.add.sprite(0,0, "screen");
-        let hpStyle = { font: "26pt Comic Sans", fill: "yellow", align: "left" };
-        let dmgStyle = { font: "14pt Comic Sans", fill: "white", align: "left" };
-        let etStyle = { font: "38pt Arial", fill: "red", align: "left"}
-        pc.hpText = game.add.text( 150, 10, "" + pc.hp + "/" + pc.maxhp + "hp", hpStyle);
+        let hpStyle = { font: "26pt Comic Sans", fill: "red", align: "center" };
+        let dmgStyle = { font: "14pt Comic Sans", fill: "white", align: "center" };
+        let etStyle = { font: "38pt Arial", fill: "red", align: "center"}
+        pc.hpText = game.add.text( 110, 33, "" + pc.hp + "/" + pc.maxhp + "hp", hpStyle);
         pc.apText = game.add.text( 300, 380, "AP: " + pc.ap, hpStyle);
-        ec.hpText = game.add.text( 775, 10, "" + ec.hp + "/" + ec.maxhp + "hp", hpStyle);
+        ec.hpText = game.add.text( 810, 33, "" + ec.hp + "/" + ec.maxhp + "hp", hpStyle);
 
-        pc.dmgText = game.add.text( 350, 10, "Player doing "+pc.dmg+" dmg", dmgStyle);
-        pc.blocktext = game.add.text( 350, 30, "Player blocking "+pc.block+" dmg", dmgStyle);
-        ec.dmgText = game.add.text( 450, 250, "Enemy doing "+ec.dmg+" dmg", dmgStyle);
-        ec.blockText = game.add.text( 450, 270, "Enemy blocking "+ec.block+" dmg", dmgStyle);
+        pc.dmgText = game.add.text( 350, 160, "Player doing "+pc.dmg+" dmg", dmgStyle);
+        pc.blocktext = game.add.text( 350, 185, "Player blocking "+pc.block+" dmg", dmgStyle);
+        ec.dmgText = game.add.text( 350, 55, "Enemy doing "+ec.dmg+" dmg", dmgStyle);
+        ec.blockText = game.add.text( 350, 80, "Enemy blocking "+ec.block+" dmg", dmgStyle);
         
         
         let endTurnBtn = game.add.sprite(550, 370, 'endturn');
@@ -317,7 +324,7 @@ window.onload = function() {
         }
         console.log(hand);
         hand[0].obj.x = 60;
-        hand[0].obj.y = 430;
+        hand[0].obj.y = 427;
         hand[1].obj.x = hand[0].obj.x + xsp;
         hand[1].obj.y = hand[0].obj.y;
         hand[2].obj.x = hand[1].obj.x + xsp;
